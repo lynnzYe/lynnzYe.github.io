@@ -5,11 +5,13 @@ import ChordSense from "../projects/ChordSense";
 import EtVisitor from "../projects/EtVisitor";
 import PiCo from "../projects/PiCo";
 import RhyMatcher from "../projects/RhyMatcher";
+import TapArr from "../projects/TapArr";
 
 const ProjectRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Notfound />} />
+      <Route path="taparr" element={<TapArr />} />
       <Route path="rhymatcher" element={<RhyMatcher />} />
       <Route path="maskexp" element={<Maskexp />} />
       <Route path="chordsense" element={<ChordSense />} />

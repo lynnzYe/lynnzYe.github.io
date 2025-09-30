@@ -26,11 +26,12 @@ const About = () => {
           width: linePos.x2 / 2,
         }}
       >
-        My name is Linzan Ye. I hold dual bachelor's degrees in Data Science and
-        Music from the University of Rochester. As a music enthusiast, I am
-        fascinated by how music helps us communicate our emotions and connect
-        with others. My goal is to contribute to the development of AI
-        companions that help minimize the barriers to self-expression.
+        My name is Linzan Ye. I am currently pursing an M.S. degree in Music and
+        Technology at Carnegie Mellon University, advised by Prof. Roger
+        Dannenberg. As a music enthusiast, I am fascinated by how music helps us
+        communicate our emotions and connect with others. My goal is to
+        contribute to the development of AI companions that help minimize the
+        barriers to self-expression.
       </p>
       <PianoFrame id="aboutframe" maxScrollThres={0} />
     </>

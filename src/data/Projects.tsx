@@ -6,6 +6,16 @@ import et from "./et.png";
 import chordsense from "./chordsense.png";
 import pico from "./pico.webp";
 import rhymatcher from "./rhymatcher.jpg";
+import taparr from "./taparr.png";
+
+const p6: Project = {
+  id: 11,
+  img: taparr,
+  title: "Tap Arranger",
+  brief:
+    "Perform real-time piano arranging of your favorite melody just by tapping!",
+  link: "/proj/taparr",
+};
 
 const p5: Project = {
   id: 1,
@@ -61,4 +71,4 @@ const p0: Project = {
   link: "https://github.com/mtaruno/vnomics",
 };
 
-export const projs = [p5, p4, p3, p2, p1, p0];
+export const projs = [p6, p5, p4, p3, p2, p1, p0];
