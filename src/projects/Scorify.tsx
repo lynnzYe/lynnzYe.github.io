@@ -1,17 +1,4 @@
-import React from "react";
 import banner from "./scorify/banner.png";
-
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
-  children,
-  ...props
-}) => (
-  <button
-    {...props}
-    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 flex items-center gap-2"
-  >
-    {children}
-  </button>
-);
 
 export default function Scorify() {
   return (
