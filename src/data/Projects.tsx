@@ -7,6 +7,33 @@ import chordsense from "./chordsense.png";
 import pico from "./pico.webp";
 import rhymatcher from "./rhymatcher.jpg";
 import taparr from "./taparr.png";
+import scorify from "./scorify.png";
+import tap2music from "./tap2music.png";
+import stylegenie from "./stylegenie.png";
+
+const p9: Project = {
+  id: 14,
+  img: stylegenie,
+  title: "Style Genie",
+  brief: "Perform any piece you'd like using style-conditioned piano genie",
+  link: "/proj/stylegenie",
+};
+
+const p8: Project = {
+  id: 13,
+  img: tap2music,
+  title: "Tap2Music",
+  brief: "Tap your music in real time with various condition signals",
+  link: "/proj/tap2music",
+};
+
+const p7: Project = {
+  id: 12,
+  img: scorify,
+  title: "Scorify",
+  brief: "Real-time expressive piano performance transcription",
+  link: "/proj/scorify",
+};
 
 const p6: Project = {
   id: 11,
@@ -71,4 +98,4 @@ const p0: Project = {
   link: "https://github.com/mtaruno/vnomics",
 };
 
-export const projs = [p6, p5, p4, p3, p2, p1, p0];
+export const projs = [p7, p8, p9, p6, p5, p4, p3, p2, p1, p0];
