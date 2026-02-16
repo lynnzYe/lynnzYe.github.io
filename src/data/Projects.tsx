@@ -10,9 +10,18 @@ import taparr from "./taparr.png";
 import scorify from "./scorify.png";
 import tap2music from "./tap2music.png";
 import stylegenie from "./stylegenie.png";
+import midialign from "./midialign.png";
+
+const p10: Project = {
+  id: 10,
+  img: midialign,
+  title: "Midi Alignment Visualizer",
+  brief: "Visualize alignment data between any two MIDI files",
+  link: "/proj/midi_align_visualizer",
+};
 
 const p9: Project = {
-  id: 14,
+  id: 9,
   img: stylegenie,
   title: "Style Genie",
   brief: "Perform any piece you'd like using style-conditioned piano genie",
@@ -20,7 +29,7 @@ const p9: Project = {
 };
 
 const p8: Project = {
-  id: 13,
+  id: 8,
   img: tap2music,
   title: "Tap2Music",
   brief: "Tap your music in real time with various condition signals",
@@ -28,7 +37,7 @@ const p8: Project = {
 };
 
 const p7: Project = {
-  id: 12,
+  id: 7,
   img: scorify,
   title: "Scorify",
   brief: "Real-time expressive piano performance transcription",
@@ -36,7 +45,7 @@ const p7: Project = {
 };
 
 const p6: Project = {
-  id: 11,
+  id: 6,
   img: taparr,
   title: "Tap Arranger",
   brief:
@@ -45,7 +54,7 @@ const p6: Project = {
 };
 
 const p5: Project = {
-  id: 1,
+  id: 5,
   img: rhymatcher,
   title: "Rhythmic Matcher",
   brief:
@@ -54,7 +63,7 @@ const p5: Project = {
 };
 
 const p4: Project = {
-  id: 1,
+  id: 4,
   img: maskexp,
   title: "Masked Expressiveness",
   brief:
@@ -63,7 +72,7 @@ const p4: Project = {
 };
 
 const p3: Project = {
-  id: 2,
+  id: 3,
   img: chordsense,
   title: "Chord Sense",
   brief:
@@ -72,7 +81,7 @@ const p3: Project = {
 };
 
 const p2: Project = {
-  id: 3,
+  id: 2,
   img: pico,
   title: "Piano Conductor",
   brief:
@@ -81,7 +90,7 @@ const p2: Project = {
 };
 
 const p1: Project = {
-  id: 3,
+  id: 1,
   img: et,
   title: "Extraterrestrial Vistor",
   brief:
@@ -90,7 +99,7 @@ const p1: Project = {
 };
 
 const p0: Project = {
-  id: 3,
+  id: 0,
   img: dpf,
   title: "Vnomics - DPF Failure Prediction",
   brief:
@@ -98,4 +107,4 @@ const p0: Project = {
   link: "https://github.com/mtaruno/vnomics",
 };
 
-export const projs = [p7, p8, p9, p6, p5, p4, p3, p2, p1, p0];
+export const projs = [p10, p7, p8, p9, p6, p5, p4, p3, p2, p1, p0];
