@@ -34,7 +34,7 @@ const Brief = () => {
           display: "grid",
         }}
       >
-        <span style={{ fontSize: 0.012 * linePos.x2 }}>Hello! I'm Linzan.</span>
+        <span style={{ fontSize: 0.012 * linePos.x2 }}>Hello! I'm Linzan(Lynn).</span>
         <span style={{ fontSize: 0.013 * linePos.x2 }}>
           I am obsessed about music.
         </span>

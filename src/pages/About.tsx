@@ -26,7 +26,7 @@ const About = () => {
           width: linePos.x2 / 2,
         }}
       >
-        My name is Linzan Ye. I am currently pursing an M.S. degree in Music and
+        My name is Linzan(Lynn) Ye. I am currently pursing an M.S. degree in Music and
         Technology at Carnegie Mellon University, advised by Prof. Roger
         Dannenberg and Chris Donahue. As a music enthusiast, I am fascinated by
         how music helps us communicate our emotions and connect with others. My
