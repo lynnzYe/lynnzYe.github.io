@@ -1,34 +1,135 @@
 .piano-frame {
-    position: relative;
-    width: 100%;
-    z-index: 0;
-    align-items: center;
-    color: black;
+  position: relative;
+  width: 100%;
+  color: #171717;
+  isolation: isolate;
 }
 
-.title {
-    position: absolute;
-    width: 62%;
-    text-align: center;
+.piano-frame__body {
+  position: relative;
+  width: 100%;
+  min-height: max(100svh, 74.5vw);
+  overflow: hidden;
 }
 
-.full-size {
-    position: inherit;
-    width: 100%;
-    height: 100%;
-    /* z-index: inherit; */
+.piano-frame__outline-layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.piano-frame__outline {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.piano-frame__glow {
+  stroke-width: 14;
+  stroke-opacity: 0.045;
+}
+
+.piano-frame__line {
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-piano 1.8s cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+}
+
+.piano-frame__inner {
+  width: min(100%, 96rem);
+  margin: 0 auto;
+  padding: clamp(4.5rem, 8vw, 7rem) clamp(1rem, 3vw, 3rem) clamp(5rem, 8vw, 8rem);
+}
+
+.piano-frame__header {
+  width: min(60%, 58rem);
+  padding: clamp(1rem, 5vw, 4rem) 0 clamp(2.5rem, 5vw, 4.5rem);
+  text-align: center;
+}
+
+.piano-frame__header h1 {
+  margin: 0;
+  font-size: clamp(2.75rem, 5.5vw, 5.5rem);
+  font-weight: 580;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.piano-frame__header span {
+  display: block;
+  width: min(16rem, 55%);
+  height: 1px;
+  margin: 1.25rem auto 0;
+  background: rgba(20, 20, 20, 0.42);
+}
+
+.piano-frame__content {
+  position: relative;
+  z-index: 2;
+}
+
+.piano-frame__piano {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.piano-frame__piano > p {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  margin: 0;
+  padding: 0 1rem 0.85rem;
+  color: #555;
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  letter-spacing: 0.04em;
 }
 
 .piano-holder {
-    position: relative;
-    z-index: 0;
-    transition: opacity 1.5s ease, backdrop-filter 0.5s ease;
+  width: 100%;
+  min-height: 5.5rem;
 }
 
-.hidden {
-    opacity: 0;
-    /* Fade out */
-    backdrop-filter: blur(10px);
-    z-index: 0;
-    /* Apply blur effect */
+@keyframes draw-piano {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .piano-frame__body {
+    min-height: 100svh;
+  }
+
+  .piano-frame__inner {
+    padding-top: 4.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .piano-frame__header {
+    width: 100%;
+    padding-top: 2.5rem;
+  }
+
+  .piano-frame__outline-layer {
+    opacity: 0.7;
+  }
+
+  .piano-frame__line {
+    stroke-width: 3.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piano-frame__line {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
 }

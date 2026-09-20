@@ -1,32 +1,37 @@
 .scroll-arrow {
-    position: fixed;
-    left: 50%;
-    bottom: 1%;
-    width: 3%;
-    transform: translateX(-50%);
-
-    animation: bounce 1s infinite;
-    opacity: 1;
-    transition: opacity 0.5s ease;
+  position: fixed;
+  left: 50%;
+  bottom: 0.75rem;
+  z-index: 12;
+  width: clamp(1.25rem, 2.2vw, 2rem);
+  opacity: 0.58;
+  transform: translateX(-50%);
+  transition: opacity 240ms ease, visibility 240ms ease;
+  animation: scroll-bounce 1.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.hidden {
-    opacity: 0;
-    /* visibility: hidden; */
-    transition: opacity 0.5s ease;
-    /* Optional: keeps the space */
-    /* Alternatively, you can use display: none; */
+.scroll-arrow img {
+  display: block;
+  width: 100%;
 }
 
-@keyframes bounce {
+.scroll-arrow--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
 
-    0%,
-    100% {
-        transform: translateY(0);
-    }
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -0.45rem);
+  }
+}
 
-    50% {
-        transform: translateY(-10px);
-        /* Adjust bounce height */
-    }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-arrow {
+    animation: none;
+  }
 }

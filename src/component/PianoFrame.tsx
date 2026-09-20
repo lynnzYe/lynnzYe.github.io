@@ -1,32 +1,9 @@
 import "./PianoFrame.css";
-import React, { ReactNode } from "react";
-import PianoSection from "./PianoSections";
+import React, { ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";
 import PianoHolder from "./PianoHolder";
-import { useWindowSize, LinePos } from "../hooks/Window";
 import ScrollArrow from "./ScrollArrow";
-import { playRandomNote } from "./tones/Play";
-
-// import lg from "../logger";
-
-// piano shape: `
-//         M 0 42
-//         Q 0 0 93 0
-//         Q 218 0 232 46
-//         L 276 346
-//         C 299 478 421 408 426 538
-//         `,
-
-// interface Particle {
-//   x: number;
-//   y: number;
-//   vx: number;
-//   vy: number;
-//   life: number;
-// }
 
 interface PianoCurveProps {
-  glowIntensity?: number;
-  animationSpeed?: number;
   primaryColor?: string;
   maxScrollThres?: number;
   children?: ReactNode;
@@ -37,182 +14,143 @@ interface PianoCurveProps {
   sectionVisibleThres?: number;
 }
 
-export function calEndY(pos: LinePos, scrollThres: number) {
-  return pos.x2 * 1.1 + scrollThres;
-  // const midY1 = 0.1 * pos.x2;
-  // const midYShift = Math.min(scrollThres, -Math.min(pos.y1 + midY1, 0)); // Starts shifting once reaching the beginning of the middle section
-  // // const midYShift = scrollThres /12;
-  // const tailY3 = 0.93 * pos.x2 + midYShift;
-  // const endY = tailY3 + 0.19 * pos.x2;
-  // console.log("calendy is bad", endY, scrollThres);
-  // return endY;
+interface FrameSize {
+  width: number;
+  height: number;
 }
 
-function getExtendedPath(pos: LinePos, scrollThres: number) {
-  const pianoWidth = pos.x2;
-  const midY1 = 0.1 * pianoWidth;
-  const midYShift = scrollThres;
-  //  Math.min(scrollThres, -Math.min(pos.y1 + midY1, 0)); // Starts shifting once reaching the beginning of the middle section
+const EMPTY_SIZE: FrameSize = { width: 1, height: 1 };
 
-  const midY2 = 0.48 * pianoWidth + midYShift;
-  const tailY1 = 0.79 * pianoWidth + midYShift;
-  const tailY2 = 0.63 * pianoWidth + midYShift;
-  const tailY3 = 0.93 * pianoWidth + midYShift;
-  const endY = tailY3 + 0.187 * pianoWidth;
-  const xCalibrate = 0;
-  return {
-    baseCurve: `
-            M ${xCalibrate} ${endY}
-            L ${xCalibrate} ${midY1}
-            Q ${xCalibrate} 1 
-              ${0.22 * pianoWidth + xCalibrate} 1
-            Q ${0.58 * pianoWidth + xCalibrate} 1 
-              ${0.62 * pianoWidth + xCalibrate} ${midY1}
+function buildPianoPath({ width, height }: FrameSize) {
+  // Keep the original grand-piano profile, but compress its resting length.
+  // Only the soundboard section grows when a page needs more vertical room.
+  const restingScale = 2 / 3;
+  const baseHeight = width * 1.117 * restingScale;
+  const stretch = Math.max(0, height - baseHeight);
+  const topShoulder = width * 0.1;
+  const waist = width * 0.48 * restingScale + stretch;
+  const outerTail = width * 0.79 * restingScale + stretch;
+  const innerTail = width * 0.63 * restingScale + stretch;
+  const lowerTail = width * 0.93 * restingScale + stretch;
+  const end = Math.max(height, baseHeight);
 
-            L ${0.67 * pianoWidth + xCalibrate} ${midY2} 
-
-            C ${0.72 * pianoWidth + xCalibrate} ${tailY1} 
-              ${0.98 * pianoWidth + xCalibrate} ${tailY2}
-              ${pianoWidth + xCalibrate} ${tailY3}
-            
-            V ${endY}
-            `,
-  };
+  return `
+    M 1 ${end}
+    L 1 ${topShoulder}
+    Q 1 1 ${width * 0.22} 1
+    Q ${width * 0.58} 1 ${width * 0.62} ${topShoulder}
+    L ${width * 0.67} ${waist}
+    C ${width * 0.72} ${outerTail} ${width * 0.98} ${innerTail} ${width - 1} ${lowerTail}
+    V ${end}
+  `;
 }
 
-export function getTitlePosX(linePos: LinePos) {
-  return linePos.x2 / 3.2;
-  //   return linePos.x2 / 1.25 + CalCenterXCalibrate(linePos.x2);
-}
-
-export function getTitlePosY(linePos: LinePos) {
-  return linePos.x2 / 6
-  // return 18 * Math.sqrt(linePos.x2);
-}
-
-function handleClick() {
-  console.log("Test test");
-  playRandomNote();
-}
-
+/**
+ * One responsive grand-piano frame for every top-level page. The top geometry
+ * is width-driven; only the soundboard stretches when the content is long.
+ */
 const PianoFrame: React.FC<PianoCurveProps> = ({
-  // glowIntensity = 0.5,
-  // animationSpeed = 10,
   primaryColor = "#333333",
-  maxScrollThres = window.innerWidth / 3,
   children,
   title,
   id,
-  disableSection = false,
   disablePiano = false,
-  sectionVisibleThres = 0 + screen.availHeight * 0.2,
 }) => {
-  const linePos = useWindowSize();
-  const paths = getExtendedPath(linePos, maxScrollThres); // TODO @Bmois write the function to convert linePos
-  return (
-    <div
-      className="piano-frame"
-      id={id}
-      style={{
-        height: calEndY(linePos, maxScrollThres),
-        paddingTop: 0,
-      }}
-    >
-      {title && (
-        <div className="title">
-          <p
-            style={{
-              paddingTop: getTitlePosY(linePos),
-              fontSize: 0.04 * linePos.x2,
-              color: "black",
-            }}
-          >
-            <span>{title}</span>
-          </p>
-          <hr style={{ width: "50%", margin: "0 auto" }} />
-        </div>
-      )}
-      <ScrollArrow />
-      <svg className="full-size" onClick={handleClick} style={{}}>
-        <defs>
-          <linearGradient
-            id="elegantGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="0%"
-          >
-            <stop offset="0%" stopColor={primaryColor} stopOpacity="0.4" />
-            <stop offset="50%" stopColor={"#248753a4"} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={primaryColor} stopOpacity="0.4" />
-          </linearGradient>
-          <filter id="mainGlow">
-            <feGaussianBlur stdDeviation={3} result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter
-            id="subtleGlow"
-            x="-100%"
-            y="-100%"
-            width="300%"
-            height="300%"
-          >
-            <feGaussianBlur in="SourceGraphic" stdDeviation={8} result="blur" />
-            <feColorMatrix
-              in="blur"
-              type="matrix"
-              values="
-                1 0 0 0 0
-                0 1 0 0 0
-                0 0 1 0 0
-                0 0 0 15 -7
-              "
-            />
-          </filter>
-        </defs>
-        <path
-          d={paths.baseCurve}
-          fill="none"
-          stroke={primaryColor}
-          strokeWidth="12"
-          strokeOpacity="0.05"
-          filter="url(#subtleGlow)"
-        />
-        <g className="transition-all duration-300 ease-out">
-          <path
-            d={paths.baseCurve}
-            fill="none"
-            stroke="url(#elegantGradient)"
-            strokeWidth={"3"}
-            filter="url(#mainGlow)"
-          />
-          <path
-            d={paths.baseCurve}
-            fill="none"
-            stroke="url(#shimmerGradient)"
-            strokeWidth={"3"}
-            opacity="0.3"
-          />
-        </g>
-      </svg>
-      {!disableSection && (
-        <PianoSection
-          visibleThres={sectionVisibleThres}
-          scrollThres={maxScrollThres + linePos.x2 * 0.4}
-          width={linePos.x2}
-        />
-      )}
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState<FrameSize>(EMPTY_SIZE);
+  const gradientId = useId().replace(/:/g, "");
 
-      <PianoHolder
-        width={linePos.x2}
-        visibleThres={calEndY(linePos, maxScrollThres) - linePos.y2}
-        isVisible={!disablePiano}
-      />
-      {children}
-    </div>
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+
+    const updateSize = () => {
+      const next = {
+        width: Math.max(1, body.clientWidth),
+        height: Math.max(1, body.clientHeight),
+      };
+      setSize((current) =>
+        current.width === next.width && current.height === next.height
+          ? current
+          : next
+      );
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(body);
+    return () => observer.disconnect();
+  }, []);
+
+  const path = useMemo(() => buildPianoPath(size), [size]);
+
+  return (
+    <section className="piano-frame" id={id}>
+      <div className="piano-frame__body" ref={bodyRef}>
+        <div className="piano-frame__outline-layer" aria-hidden="true">
+          <svg
+            className="piano-frame__outline"
+            viewBox={`0 0 ${size.width} ${size.height}`}
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor={primaryColor} stopOpacity="0.28" />
+                <stop offset="52%" stopColor="#248753" stopOpacity="0.76" />
+                <stop offset="100%" stopColor={primaryColor} stopOpacity="0.3" />
+              </linearGradient>
+              <filter
+                id={`${gradientId}-glow`}
+                x="-20%"
+                y="-20%"
+                width="140%"
+                height="140%"
+              >
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path
+              className="piano-frame__glow"
+              d={path}
+              fill="none"
+              stroke={primaryColor}
+            />
+            <path
+              className="piano-frame__line"
+              d={path}
+              pathLength="1"
+              fill="none"
+              stroke={`url(#${gradientId})`}
+              filter={`url(#${gradientId}-glow)`}
+            />
+          </svg>
+        </div>
+
+        <div className="piano-frame__inner">
+          {title ? (
+            <header className="piano-frame__header">
+              <h1>{title}</h1>
+              <span aria-hidden="true" />
+            </header>
+          ) : null}
+
+          <div className="piano-frame__content">{children}</div>
+        </div>
+      </div>
+
+      {!disablePiano ? (
+        <div className="piano-frame__piano">
+          <p>Play with your mouse, touch, or computer keyboard.</p>
+          <PianoHolder />
+        </div>
+      ) : null}
+
+      <ScrollArrow />
+    </section>
   );
 };
 

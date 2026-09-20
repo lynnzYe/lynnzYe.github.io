@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PianoFrame from "../component/PianoFrame";
-// import lg from "../logger";
 import "./Music.css";
-import { Link } from "react-router-dom";
-import { useWindowSize } from "../hooks/Window";
 
 export interface MusicInfo {
   id: string;
@@ -18,116 +15,99 @@ interface MusicProps {
   music: MusicInfo[];
 }
 
-const Music: React.FC<MusicProps> = ({ music }) => {
-  const linePos = useWindowSize();
-  const [filter, setFilter] = useState<string>("all");
-  const [filteredMusic, setFilteredMusic] = useState<MusicInfo[]>(music);
+type MusicFilter = "all" | MusicInfo["type"];
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [fontSize, setFontSize] = useState<number>(0);
-  const [containerHeight, setContainerHeight] = useState<number>(0);
+const FILTERS: Array<{ value: MusicFilter; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "composition", label: "Compositions" },
+  { value: "performance", label: "Performances" },
+  { value: "improvisation", label: "Improvisations" },
+];
 
-  useEffect(() => {
-    // Filter Music based on selected type
-    if (filter === "all") {
-      setFilteredMusic(music);
-    } else {
-      setFilteredMusic(music.filter((m) => m.type === filter));
-    }
-  }, [filter, music]);
+const MusicCard: React.FC<{ item: MusicInfo }> = ({ item }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    const updateFontSize = () => {
-      if (cardRef.current) {
-        const cardWidth = cardRef.current.offsetWidth;
-        setFontSize(cardWidth * 0.04);
-      }
+    const description = descriptionRef.current;
+    if (!description || expanded) return;
+
+    const measureOverflow = () => {
+      setHasOverflow(description.scrollHeight > description.clientHeight + 1);
     };
-    const updateContainerSize = () => {
-      if (containerRef.current) {
-        const cHeight = containerRef.current.offsetHeight;
-        setContainerHeight(cHeight);
-      }
-    };
-    updateFontSize();
-    updateContainerSize();
-    window.addEventListener("resize", updateFontSize);
-    window.addEventListener("resize", updateContainerSize);
-    return () => {
-      window.removeEventListener("resize", updateFontSize);
-      window.removeEventListener("resize", updateContainerSize);
-    };
-  }, []);
+
+    measureOverflow();
+    const observer = new ResizeObserver(measureOverflow);
+    observer.observe(description);
+    return () => observer.disconnect();
+  }, [expanded, item.brief]);
+
   return (
-    <PianoFrame
-      maxScrollThres={containerHeight}
-      title="Music"
-      id="proj_frame"
-      sectionVisibleThres={containerHeight / 1.8}
-    >
-      {/* Filter Component */}
-      <div
-        className="filter-bar"
-        style={{
-          top: linePos.x2 / 4,
-          left: linePos.x2 / 3.3,
-        }}
+    <article className={`music-card ${expanded ? "music-card--expanded" : ""}`}>
+      <a
+        href={item.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="music-card-media"
+        aria-label={`Listen to ${item.title}`}
       >
-        <div
-          className={`filter-item ${filter === "all" ? "active" : ""}`}
-          style={{ fontSize: linePos.x2 / 60 }}
-          onClick={() => setFilter("all")}
+        <img src={item.img} alt="" loading="lazy" />
+      </a>
+      <div className="music-card-content">
+        <span className="music-card-type">{item.type}</span>
+        <a
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="music-card-title"
         >
-          All
-        </div>
-        <div
-          className={`filter-item ${filter === "composition" ? "active" : ""}`}
-          style={{ fontSize: linePos.x2 / 60 }}
-          onClick={() => setFilter("composition")}
+          <h2>{item.title}</h2>
+        </a>
+        <p
+          ref={descriptionRef}
+          className={expanded ? "music-card-description--expanded" : ""}
         >
-          Compositions
-        </div>
-        <div
-          className={`filter-item ${filter === "performance" ? "active" : ""}`}
-          style={{ fontSize: linePos.x2 / 60 }}
-          onClick={() => setFilter("performance")}
+          {item.brief}
+        </p>
+        <button
+          type="button"
+          className={`music-card-more ${hasOverflow || expanded ? "is-visible" : ""}`}
+          aria-expanded={expanded}
+          onClick={() => setExpanded((current) => !current)}
         >
-          Performances
-        </div>
-        <div
-          className={`filter-item ${
-            filter === "improvisation" ? "active" : ""
-          }`}
-          style={{ fontSize: linePos.x2 / 60 }}
-          onClick={() => setFilter("improvisation")}
-        >
-          Improvisations
-        </div>
+          {expanded ? "Less" : "More"}
+        </button>
+      </div>
+    </article>
+  );
+};
+
+const Music: React.FC<MusicProps> = ({ music }) => {
+  const [filter, setFilter] = useState<MusicFilter>("all");
+  const filteredMusic = useMemo(
+    () => filter === "all" ? music : music.filter((item) => item.type === filter),
+    [filter, music]
+  );
+
+  return (
+    <PianoFrame title="Music" id="music_frame">
+      <div className="filter-bar" role="group" aria-label="Filter music">
+        {FILTERS.map(({ value, label }) => (
+          <button
+            key={value}
+            type="button"
+            className={`filter-item ${filter === value ? "active" : ""}`}
+            aria-pressed={filter === value}
+            onClick={() => setFilter(value)}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      {/* Music Cards */}
-      <div
-        className="music-container"
-        ref={containerRef}
-        style={{ top: linePos.x2 * 0.3 }}
-      >
-        {filteredMusic.map((mur) => (
-          <Link
-            key={mur.id}
-            to={mur.link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div className="music-card" ref={cardRef}>
-              <img src={mur.img} alt={mur.title} />
-              <div className="music-card-content">
-                <h2>{mur.title}</h2>
-                <p style={{ fontSize: fontSize }}>{mur.brief}</p>
-              </div>
-            </div>
-          </Link>
-        ))}
+      <div className="music-container" aria-live="polite">
+        {filteredMusic.map((item) => <MusicCard key={item.id} item={item} />)}
       </div>
     </PianoFrame>
   );

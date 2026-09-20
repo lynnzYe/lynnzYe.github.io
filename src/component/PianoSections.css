@@ -1,56 +1,44 @@
-.sticky-section {
-    display: flex;
-    justify-content: space-around;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(240, 240, 240, 0.8);
-    transition: opacity 0.5s ease, backdrop-filter 0.5s ease, visibility 0.5s;
-    opacity: 0.5;
-    visibility: visible;
-    backdrop-filter: blur(0px);
-    z-index: 10;
+.piano-sections {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: min(100%, 72rem);
+  margin: clamp(3.5rem, 7vw, 7rem) auto 0;
+  border-top: 1px solid rgba(25, 25, 25, 0.22);
+  border-bottom: 1px solid rgba(25, 25, 25, 0.22);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
 }
 
-.sticky-section:hover {
-    opacity: 1.0;
+.piano-sections a {
+  padding: 1.1rem 1rem;
+  color: #333;
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  font-weight: 620;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
-.section-item {
-    display: flex;
-    flex: 1;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #ffffff00;
-    z-index: inherit;
-    transition: opacity 0.5s ease, backdrop-filter 0.5s ease, visibility 0.5s;
+.piano-sections a + a {
+  border-left: 1px solid rgba(25, 25, 25, 0.16);
 }
 
-.section-item:hover {
-    background-color: #ffffff00;
+.piano-sections a:hover,
+.piano-sections a:focus-visible {
+  color: #111;
+  background: rgba(36, 135, 83, 0.08);
 }
 
-.section-item a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    width: 100%;
-}
+@media (max-width: 560px) {
+  .piano-sections {
+    grid-template-columns: 1fr;
+  }
 
-.sticky {
-    position: fixed;
-    /* Keep it fixed when sticky */
-}
-
-.hidden {
-    opacity: 0;
-    backdrop-filter: blur(10px);
-    visibility: hidden;
-    z-index: 0;
-    animation: hideElement 0s 0.5s forwards;
-    /* Delays hiding */
+  .piano-sections a + a {
+    border-top: 1px solid rgba(25, 25, 25, 0.16);
+    border-left: 0;
+  }
 }

@@ -1,0 +1,138 @@
+.project-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+.project-page__main {
+  width: min(100% - 2rem, 56rem);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(6rem, 12vw, 10rem);
+}
+
+.project-page__header {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.project-page__header h1 {
+  max-width: 18ch;
+  margin: 0;
+  color: #141414;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+
+.project-page__subtitle {
+  max-width: 42rem;
+  margin: 0;
+  color: #5f5f5f;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.5;
+}
+
+.project-page__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.project-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.project-page__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #d2d2d2;
+  border-radius: 0.5rem;
+  background: #f2f2f2;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 620;
+  text-decoration: none;
+  transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+
+.project-page__action:hover,
+.project-page__action:focus-visible {
+  border-color: rgba(36, 135, 83, 0.5);
+  background: #e7f1eb;
+  color: #193d2a;
+  text-decoration: none;
+  transform: translateY(-0.1rem);
+}
+
+.project-page__action svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.project-page__banner {
+  margin: clamp(2rem, 5vw, 3.5rem) 0;
+  overflow: hidden;
+  border: 1px solid #dedede;
+  border-radius: 0.7rem;
+  background: #f6f6f6;
+}
+
+.project-page__banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project-page__body {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+
+.project-page__body section {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  border-top: 1px solid #e1e1e1;
+}
+
+.project-page__body section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.project-page__body h2 {
+  margin: 0 0 1rem;
+  color: #1d1d1d;
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1.2;
+}
+
+.project-page__body p,
+.project-page__body li {
+  color: #5b5b5b;
+  font-size: clamp(0.98rem, 1.25vw, 1.08rem);
+  line-height: 1.75;
+}
+
+.project-page__body ul,
+.project-page__body ol {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-page__action {
+    transition: none;
+  }
+}

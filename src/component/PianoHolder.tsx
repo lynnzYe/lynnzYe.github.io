@@ -1,58 +1,46 @@
 import Piano from "../lib/react-piano/Piano.jsx";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { playNote, stopNote } from "./tones/PianoSampler.js";
-import { createKeyPreset, KeyConfig } from "./tmp/reactpiano_fix.js";
-// import lg from "../logger.js";
+import { createKeyPreset } from "./tmp/reactpiano_fix.js";
 
 interface PianoHolderProps {
-  width?: number;
-  visibleThres?: number;
   isVisible?: boolean;
 }
 
-const PianoHolder: React.FC<PianoHolderProps> = ({
-  width = window.innerWidth,
-  visibleThres = window.innerWidth * 0.5,
-  isVisible = true,
-}) => {
+const PianoHolder: React.FC<PianoHolderProps> = ({ isVisible = true }) => {
+  const holderRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const keyboardShortcuts = useMemo(() => createKeyPreset(), []);
+  const noteRange = width > 0 && width < 600
+    ? { first: 60, last: 76 }
+    : { first: 48, last: 83 };
+
   useEffect(() => {
-    const handleChange = () => {
-      // setIsVisible(!scrollable);
+    const holder = holderRef.current;
+    if (!holder) return;
+
+    const updateWidth = () => {
+      setWidth(Math.floor(holder.getBoundingClientRect().width));
     };
-    handleChange();
-    window.addEventListener("scroll", handleChange);
-    return () => {
-      window.removeEventListener("scroll", handleChange);
-    };
-  }, [visibleThres]);
-  const KeyPreset = createKeyPreset();
+    updateWidth();
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(holder);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div
-      className={`piano-holder`}
-      style={{ height: 0.15 * width, textAlign: "center", color: "black" }}
-    >
-      {isVisible && (
-        <>
-          <Piano
-            noteRange={KeyConfig.noteRange}
-            width={width}
-            keyboardShortcuts={KeyPreset}
-            keyboardShortcutOffset={KeyConfig.keyboardShortcutOffset}
-            playNote={playNote}
-            stopNote={stopNote}
-          />
-          <span style={{ fontSize: 0.009 * width }}>
-            Powered by{" "}
-            <a
-              href="https://github.com/kevinsqi/react-piano/tree/master"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              react-piano
-            </a>
-          </span>
-        </>
-      )}
+    <div className="piano-holder" ref={holderRef}>
+      {isVisible && width > 0 ? (
+        <Piano
+          noteRange={noteRange}
+          width={width}
+          keyboardShortcuts={keyboardShortcuts}
+          keyboardShortcutOffset={0}
+          playNote={playNote}
+          stopNote={stopNote}
+        />
+      ) : null}
     </div>
   );
 };

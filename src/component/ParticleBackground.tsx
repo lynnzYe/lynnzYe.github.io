@@ -172,7 +172,7 @@ const ParticleBackground = () => {
 
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
-      window.addEventListener("keyup", handleKeyUp);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
 

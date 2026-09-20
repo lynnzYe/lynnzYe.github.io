@@ -1,40 +1,32 @@
 import PianoFrame from "../component/PianoFrame";
 import "./About.css";
 import photo from "../assets/photo_life_circle.png";
-import { useWindowSize } from "../hooks/Window";
 
 const About = () => {
-  const linePos = useWindowSize();
   return (
-    <>
-      <img
-        src={photo}
-        style={{
-          width: linePos.x2 / 6,
-          left: linePos.x2 / 4.5,
-          top: linePos.x2 / 10,
-          borderWidth: linePos.x2 / 300,
-        }}
-        className="profile-img"
-      />
-      <p
-        className="bio"
-        style={{
-          left: linePos.x2 / 3,
-          top: linePos.x2 / 2.7,
-          fontSize: linePos.x2 / 70,
-          width: linePos.x2 / 2,
-        }}
-      >
-        My name is Linzan(Lynn) Ye. I am currently pursing an M.S. degree in Music and
-        Technology at Carnegie Mellon University, advised by Prof. Roger
-        Dannenberg and Chris Donahue. As a music enthusiast, I am fascinated by
-        how music helps us communicate our emotions and connect with others. My
-        goal is to contribute to the development of AI companions that help
-        minimize the barriers to self-expression.
-      </p>
-      <PianoFrame id="aboutframe" maxScrollThres={0} />
-    </>
+    <PianoFrame id="aboutframe" title="About">
+      <div className="about-content">
+        <img
+          src={photo}
+          alt="Linzan Ye"
+          className="about-content__photo"
+        />
+        <div className="about-content__copy">
+          <p>
+            My name is Linzan (Lynn) Ye. I am currently pursuing an M.S. degree
+            in Music and Technology at Carnegie Mellon University, advised by
+            Prof. Roger Dannenberg and Chris Donahue.
+          </p>
+          <p>
+            As a music enthusiast, I am fascinated by how music helps us
+            communicate our emotions and connect with others. My goal is to
+            contribute to the development of AI companions that help minimize
+            the barriers to self-expression.
+          </p>
+        </div>
+      </div>
+    </PianoFrame>
   );
 };
+
 export default About;

@@ -26,8 +26,8 @@ function ScrollArrow() {
   }, []);
 
   return (
-    <div className={`scroll-arrow ${!isVisible ? "hidden" : ""}`}>
-      {isScrollable && <img src={DownArr} style={{ width: "100%" }} />}
+    <div className={`scroll-arrow ${!isVisible ? "scroll-arrow--hidden" : ""}`}>
+      {isScrollable && <img src={DownArr} alt="Scroll down" />}
     </div>
   );
 }

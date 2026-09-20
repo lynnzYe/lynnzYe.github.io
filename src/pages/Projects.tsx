@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react";
 import PianoFrame from "../component/PianoFrame";
 import "./Projects.css";
 import { Link } from "react-router-dom";
-import { useWindowSize } from "../hooks/Window";
 
 export interface Project {
   id: number;
@@ -17,69 +15,27 @@ interface ProjectProps {
 }
 
 const Projects: React.FC<ProjectProps> = ({ projects }) => {
-  const cardRef = useRef<HTMLDivElement>(null); // Ref to the card div
-  const [fontSize, setFontSize] = useState<number>(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState<number>(0);
-  const linePos = useWindowSize();
-
-  useEffect(() => {
-    // Function to calculate and update font size based on card width
-    const updateFontSize = () => {
-      if (cardRef.current) {
-        const cardWidth = cardRef.current.offsetWidth;
-        setFontSize(cardWidth * 0.05);
-      }
-    };
-    const updateContainerSize = () => {
-      if (containerRef.current) {
-        const cHeight = containerRef.current.offsetHeight;
-        setContainerHeight(cHeight);
-      }
-    };
-    updateFontSize();
-    updateContainerSize();
-    window.addEventListener("resize", updateFontSize);
-    window.addEventListener("resize", updateContainerSize);
-    // console.log("===container height", containerHeight);
-    return () => {
-      window.removeEventListener("resize", updateFontSize);
-      window.removeEventListener("resize", updateContainerSize);
-    };
-  }, []);
-
   return (
-    // <div className="project-frame-container">
-    <PianoFrame
-      maxScrollThres={containerHeight}
-      title="Projects"
-      id="proj_frame"
-      sectionVisibleThres={containerHeight / 1.7}
-    >
-      <div
-        className="project-container"
-        ref={containerRef}
-        style={{ top: linePos.x2 * 0.3 }}
-      >
+    <PianoFrame title="Projects" id="proj_frame">
+      <div className="project-container">
         {projects.map((project) => (
           <Link
             key={project.id}
             to={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
+            target={project.link.startsWith("http") ? "_blank" : undefined}
+            rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
+            className="project-card"
           >
-            <div className="project-card" ref={cardRef}>
-              <img src={project.img} />
-              <div className="project-card-content">
-                <h2>{project.title}</h2>
-                <p style={{ fontSize: fontSize }}>{project.brief}</p>
-              </div>
+            <img src={project.img} alt="" loading="lazy" />
+            <div className="project-card-content">
+              <h2>{project.title}</h2>
+              <p>{project.brief}</p>
+              <span aria-hidden="true">↗</span>
             </div>
           </Link>
         ))}
       </div>
     </PianoFrame>
-    // </div>
   );
 };
 
