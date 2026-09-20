@@ -10,11 +10,13 @@ import Scorify from "../projects/Scorify";
 import Tap2Music from "../projects/Tap2Music";
 import StyleGenie from "../projects/StyleGenie";
 import MidiAlignVisualizer from "../projects/MidiAlignVisualizer";
+import PiCoMaestro from "../projects/PiCoMaestro";
 
 const ProjectRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Notfound />} />
+      <Route path="picomaestro" element={<PiCoMaestro />} />
       <Route path="midi_align_visualizer" element={<MidiAlignVisualizer />} />
       <Route path="tap2music" element={<Tap2Music />} />
       <Route path="scorify" element={<Scorify />} />

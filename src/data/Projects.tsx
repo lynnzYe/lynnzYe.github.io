@@ -11,6 +11,15 @@ import scorify from "./scorify.png";
 import tap2music from "./tap2music.png";
 import stylegenie from "./stylegenie.png";
 import midialign from "./midialign.png";
+import picomaestro from './picomaestro.png'
+
+const p11: Project = {
+  id: 11,
+  img: picomaestro,
+  title: "PiCoMaestro",
+  brief: "Unleash your expressive potential.",
+  link: "/proj/picomaestro",
+};
 
 const p10: Project = {
   id: 10,
@@ -107,4 +116,4 @@ const p0: Project = {
   link: "https://github.com/mtaruno/vnomics",
 };
 
-export const projs = [p10, p7, p8, p9, p6, p5, p4, p3, p2, p1, p0];
+export const projs = [p11, p10, p7, p8, p9, p6, p5, p4, p3, p2, p1, p0];
