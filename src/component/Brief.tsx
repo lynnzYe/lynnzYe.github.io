@@ -10,7 +10,7 @@ const Brief = () => {
       <p className="home-brief__intro">
         <span>Hello! I&apos;m Linzan (Lynn).</span>
         <span>I am obsessed with music.</span>
-        <span>I am also an engineer and researcher.</span>
+        <span>I am also a researcher and engineer.</span>
         <span className="home-brief__quote">
           <i>“Music as moments of transcendence”</i>
         </span>
